@@ -9,7 +9,9 @@ as your centralized to-do list.
 I practice a zero-inbox policy.  When an email comes in, I either 
 
 a) immediately reply to it
+
 b) delete it
+
 c) send it to Evernote
 
 Simply star an email, and the script will send it to Evernote.  You can even archive the email if you want,
@@ -29,6 +31,7 @@ To implement the Secret Weapon, I needed a simple way to move incoming emails in
 having to:
 
 a) do a lot of copy/pasting
+
 b) forward emails (clumsy)
 
 I came across a Google Script by Harry Oosterveen 
@@ -50,7 +53,9 @@ So I decided to use stars.  Stars are a message-level marker.  The nice thing is
 on any device, and the server-side script handles things behind the scenes.
 
 1.  Star an email in Google Mail (web or mobile application)
+
 2.  Script checks your mail, searches for starred messages, and saves them to Evernote.
+
 3.  Script automatically un-stars the messages when it is completed.
 
 --Installation--
@@ -58,11 +63,17 @@ on any device, and the server-side script handles things behind the scenes.
 It runs as a script in your Google Drive. To install:
 
 1.  Go to your Google Drive
+
 2.  Click Create>More>Script and create a new blank project.
+
 3.  Delete the boilerplate code that Google pasted into the editing area.
+
 4.  Paste all of this code into the editing area
+
 5.  Give the script a name: change "Untitled project" to something else more memorable.
+
 6.  Click File>Project properties and click on 'User properties' tab.
+
 7.  Define some Properties:
 
         Property: evernoteMail           Value: -your Evernote email address-
