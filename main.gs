@@ -85,10 +85,12 @@ https://developers.google.com/apps-script/
 
 */
 
-
 function MailtoEvernote() {
   var evernoteMail = UserProperties.getProperty('evernoteMail');
   var defaultNotebook = UserProperties.getProperty('defaultNotebook_mail');
+  var message_cc='';
+  var message_bcc='';
+  var message_attachments='';
   // get all threads that contain starred messages
   var starred_threads=GmailApp.getStarredThreads();
   for(var i=0;i < starred_threads.length;i++) {
@@ -98,19 +100,30 @@ function MailtoEvernote() {
     for (var j=0;j < messages.length;j++) {
       // if message is starred, process tags and send to Evernote
       if (messages[j].isStarred()){
-       
+        message_cc=messages[j].getCc();
+        message_bcc=messages[j].getBcc();
+        message_attachments=messages[j].getAttachments();
         // Parse notebook name
         if(defaultNotebook != undefined && defaultNotebook != '') {
           var notebook=' @' + defaultNotebook;
         } else {
           var notebook=' @' + 'Actions Pending';
+        }        
+        var message_body="Date: "+messages[j].getDate()+"<br>Message ID: "+messages[j].getId()+"<Br>To: "+messages[j].getTo()+"<br>From: "
+          +messages[j].getFrom();
+        if (message_cc != '') {
+          message_body=message_body+"<br>Cc: "+message_cc;
         }
-                
-        message_body="Date: "+messages[j].getDate()+"<br>Message ID: "+messages[j].getId()+"<Br>To: "+messages[j].getTo()+"<br>From: "
-          +messages[j].getFrom()+"<br>Cc: "+messages[j].getCc()+"<br>Bcc: "+messages[j].getBcc()+"<br><br>"+messages[j].getBody();
-        GmailApp.sendEmail(evernoteMail, messages[j].getSubject()+notebook, '', {noReply:true, htmlBody: message_body});
+        if (message_bcc != '') {
+          message_body=message_body+"<br>Bcc: "+message_bcc;
+        }
+        message_body=message_body+"<br><br>"+messages[j].getBody();
+        if (message_attachments != '') {
+          GmailApp.sendEmail(evernoteMail, messages[j].getSubject()+notebook, '', {noReply:true, htmlBody: message_body, attachments: message_attachments});
+        } else {
+          GmailApp.sendEmail(evernoteMail, messages[j].getSubject()+notebook, '', {noReply:true, htmlBody: message_body});
+        }
         messages[j].unstar();   
-
       }
     }
   }
